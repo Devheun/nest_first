@@ -2,6 +2,36 @@ let http = require('http');
 let fs = require('fs');
 let url = require('url');
 
+function templateHTML(title,list,body){
+	return `
+		<!doctype html>
+			<html>
+				<head>
+					<title>WEB1 - ${title}</title>
+					<meta charset="utf-8">
+				</head>
+				<body>
+					<h1><a href="/">WEB</a></h1>
+					${list}
+					${body}
+				</body>
+			</html>
+	`;
+}
+
+function templateList(filelist){
+	let list='<ul>';
+				
+	for (i=0;i<filelist.length;i++){
+		list = list + `<li>
+			<a href="/?id=${filelist[i]}">${filelist[i]}</a>
+			</li>`;
+	}
+				
+	list = list + '</ul>';
+	return list;
+}
+
 let app = http.createServer(function(request,response){
     let _url = request.url;
 	let queryData = url.parse(_url, true).query;
@@ -9,55 +39,34 @@ let app = http.createServer(function(request,response){
 	
 	if (pathname==='/'){
 		if (queryData.id === undefined){
-			let title='Welcome';
-			let data='Hello, Node.js !';
-			const template=`
-			<!doctype html>
-				<html>
-					<head>
-						<title>WEB1 - ${title}</title>
-						<meta charset="utf-8">
-					</head>
-					<body>
-						<h1><a href="/">WEB</a></h1>
-						<ol>
-							<li><a href="/?id=HTML">HTML</a></li>
-							<li><a href="/?id=CSS">CSS</a></li>
-							<li><a href="/?id=JavaScript">JavaScript</a></li>
-						</ol>
-						<h2>${title}</h2>
-						<p>${data}</p>
-					</body>
-				</html>
-			`;
-			response.writeHead(200);
-			response.end(template);
+			
+			fs.readdir('./data',(err,filelist)=>{
+				let title='Welcome';
+				let data='Hello, Node.js !';
+
+				const list=templateList(filelist);
+				const template=templateHTML(title,list,
+				`<h2>${title}</h2>${data}`);
+				
+				response.writeHead(200);
+				response.end(template);
+			});
+			
 		}else{
-			fs.readFile(`data/${queryData.id}`,'utf8',(err,data)=>{
-			let title=queryData.id;
-			const template=`
-			<!doctype html>
-				<html>
-					<head>
-						<title>WEB1 - ${title}</title>
-						<meta charset="utf-8">
-					</head>
-					<body>
-						<h1><a href="/">WEB</a></h1>
-						<ol>
-							<li><a href="/?id=HTML">HTML</a></li>
-							<li><a href="/?id=CSS">CSS</a></li>
-							<li><a href="/?id=JavaScript">JavaScript</a></li>
-						</ol>
-						<h2>${title}</h2>
-						<p>${data}</p>
-					</body>
-				</html>
-			`;
-			response.writeHead(200);
-			response.end(template);
-	});
-		}
+			fs.readdir('./data',(err,filelist)=>{
+				
+				fs.readFile(`data/${queryData.id}`,'utf8',(err,data)=>{
+				let title=queryData.id;
+				
+				const list=templateList(filelist);
+				const template=templateHTML(title,list,
+				`<h2>${title}</h2>${data}`);
+					
+				response.writeHead(200);
+				response.end(template);
+			});
+		});
+	}
 	} else{
 		response.writeHead(404);
 		response.end("Not found");

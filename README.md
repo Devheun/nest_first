@@ -16,3 +16,12 @@ console.log(data);
 });
 ```
 
+- nodejs에서 파일 목록 알아내기 (readdir을 이용한다.)
+
+```
+const fs = require('fs');
+fs.readFile('sample.txt','utf8',(err,data)=>{
+console.log(data); // CSS, HTML, JavaScript 출력됨
+});
+```
+

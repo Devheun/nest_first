@@ -1,37 +1,49 @@
 # node_first
-To study nodejs ! ( 생활코딩 nodejs 강의 )
+To study nestjs ! ( 공식문서 참조 )
 
-<h2>강의 요약</h2>
-
-- url이란? (http://opentutorials.org:3000/main?id=HTML&page=12)에서 
-http는 protocol, opentutorials.org는 host(domain), 3000은 port 번호, main은 path,
-id=HTML&page=12는 query string을 의미한다.
-
-- nodejs에서 파일 읽기 (readFile을 이용한다.)
+- Controller란 ? 들어오는 요청을 처리하고 클라이언트에 응답을 반환한다.
+(콘트롤러는 @Controller 데코레이터로 클래스를 데코레이션하여 정의)
 
 ```
-const fs = require('fs');
-fs.readFile('sample.txt','utf8',(err,data)=>{
-console.log(data);
-});
+@Controller('/boards')
+export class BoardsController{
+
+}
 ```
 
-- nodejs에서 파일 목록 알아내기 (readdir을 이용한다.)
+- 데코레이터는 인자를 Controller에 의해서 처리되는 "경로"로 받는다.
+
+- Handler란 ? @Get, @Post, @Delete 등과 같은 데코레이터로 장식 된
+컨트롤러 클래스 내의 단순한 메서드
 
 ```
-const fs = require('fs');
-fs.readFile('sample.txt','utf8',(err,data)=>{
-console.log(data); // CSS, HTML, JavaScript 출력됨
-});
+@Controller('/boards')
+export class BoardsController{
+  @Get()
+  getBoards(): string{
+    return 'This action returns all boards';
+  }
+}
 ```
 
-- nodejs는 동기와 비동기 처리 방식을 가지는데, 동기는 single-cycle 느낌이면 
-비동기는 쓰레드 느낌인 듯 하다.
+- Boards Controller 생성하기 : nest g controller boards --no-spec
 
-- nodejs는 npm이라는 package manager를 이용한다.
+- Providers란 ? 대부분의 기본 Nest 클래스는 서비스, 리포지토리, 팩토리, 헬퍼 등
+프로바이더로 취급될 수 있다. 주요 아이디어는 종속성으로 주입할 수 있다는 것.
+(객체는 서로 다양한 관계를 만들 수 있으며 객체의 인스턴스를 "연결"하는 기능은
+대부분 Nest 런타임 시스템에 위임될 수 있다.)
 
-- html의 form태그에서 주의할 점 : 사용자가 데이터를 가져올 때는 method="get"을 이용하고, 
-사용자가 데이터를 수정, 삭제 등을 할 때는 method="post"를 이용
+- Provider를 사용하기 위해서는 module 파일에 등록을 해야한다 !
 
-- post 방식으로 은밀하게 보낸 데이터를 처리하고자 할 때는 require('querystring')을 이용하여 
-request.on(~) 을 통해 값을 얻어낼 수 있다. 
+- Service란 ? 소프트웨어 개발내의 공통개념. @Injectable 데코레이터로 감싸져서
+모듈에 제공되며, 이 서비스 인스턴스는 애플리케이션 전체에서 사용될 수 있다. 
+서비스는 컨트롤러에서 데이터의 유효성을 체크하거나 DB에 아이템을 생성하는 등의 
+작업 부분 처리
+
+- Service 안에서는 DB 관련 로직을 처리한다. (DB에서 데이터 가져오거나
+DB안에 게시판 생성할 때 그 생성한 게시판 정보를 넣어주는 등등)
+
+- CLI를 이용해 Service를 생성하면 파일 안에 Injectable 데코레이터가 있고, 
+NestJs는 이것을 이용해서 다른 컴포넌트에서 이 서비스를 사용할 수 있게(Injectable) 함
+
+- Boards Service 생성하기 : nest g service boards --no-spec

@@ -1,4 +1,4 @@
-# node_first
+# nest_first
 To study nestjs ! ( 공식문서 참조 )
 
 - Controller란 ? 들어오는 요청을 처리하고 클라이언트에 응답을 반환한다.
@@ -63,3 +63,12 @@ NestJs는 이것을 이용해서 다른 컴포넌트에서 이 서비스를 사�
 - 개시물 생성 기능 : Service에서 로직을 처리한 후 Controller에서 서비스 불러오기
 
 - 게시물 생성이 잘 되었는지를 확인하기 위해 POSTMAN API를 통해 Post 메서드를 쏴준다. (json 형식으로)
+
+- DTO (Data Transfer Object)란 ? 계층간 데이터 교환을 위한 객체, 
+DB에서 데이터 얻어서 Service나 Controller 등으로 보낼 때 사용하는 객체, 
+데이터가 네트워크를 통해 전송되는 방법을 정의하는 객체
+
+- DTO는 interface나 class를 이용해서 정의하는데 nestjs 에서는 클래스를 이용하라고 함
+
+- DTO를 사용하면 데이터 유효성을 체크하는데 효율적이고, 더 안정적인 코드로 ! (유지보수 편하게)
+

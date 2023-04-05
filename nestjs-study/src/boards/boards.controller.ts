@@ -18,7 +18,7 @@ export class BoardsController {
 	// @Body() body를 이용하면 모든 request에서 보내온 값을 가져올 수 있다.
 	// 하나씩 가져오려면 @Body('title') title 과 같이..
 	@Post('/')
-	createBoard( createBoardDto: CreateBoardDto // DTO 적용
+	createBoard(@Body() createBoardDto: CreateBoardDto // DTO 적용
 	): Board{
 		return this.boardsService.createBoard(createBoardDto);
 	}

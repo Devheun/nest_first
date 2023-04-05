@@ -16,7 +16,7 @@ export class BoardsService {
 	
 	// 게시물 생성 기능
 	createBoard(createBoardDto : CreateBoardDto){ // DTO 적용
-		const {title,description} = createBoardDto || undefined || {};
+		const {title,description} = createBoardDto;
 		const board: Board ={
 			// 게시물 id는 유니크해야함. DB에 데이터를 넣어줄땐 DB가 알아서 유니크한 값 할당
 			// 지금은 로컬메모리에서 진행하므로 uuid 모듈을 이용해서!

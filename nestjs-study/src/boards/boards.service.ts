@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable,NotFoundException} from '@nestjs/common';
 import { Board, BoardStatus } from './board.model';
 import { v1 as uuid } from 'uuid';
 import {CreateBoardDto} from './dto/create-board.dto';
@@ -30,13 +30,20 @@ export class BoardsService {
 	}
 	
 	// ID로 특정 게시물 가져오기
+	// 찾는 게시물이 없을 때 에러 표출 -> 예외 인스턴스 생성해서 이용
 	getBoardById(id:string) : Board{
-		return this.boards.find((board)=>board.id===id);
+		const found=this.boards.find((board)=>board.id===id);
+		if(!found){
+			throw new NotFoundException(`Can't find Board with id ${id}`);
+		}
+		return found;
 	}
 	
 	// ID로 특정 게시물 지우기
+	// 없는 게시물을 지우려 할 때 -> 지우려하는 게시물 있는지 체크후 있다면 지우고 없으면 에러
 	deleteBoard(id:string) : void{
-		this.boards = this.boards.filter((board)=>board.id !== id);
+		const delBoard=this.getBoardById(id);
+		this.boards = this.boards.filter((board)=>board.id !== delBoard.id);
 	}
 	
 	// 특정 게시물 상태 업데이트 (private, public 상태)

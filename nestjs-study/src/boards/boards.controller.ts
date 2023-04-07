@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Delete, Patch, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Patch, Body, Param, UsePipes, ValidationPipe } from '@nestjs/common';
 import { BoardsService } from './boards.service';
 import { Board, BoardStatus } from './board.model';
 import {CreateBoardDto} from './dto/create-board.dto';
+import { BoardStatusValidationPipe } from './pipes/board-status-validation.pipe';
 
 @Controller('boards')
 export class BoardsController {
@@ -18,6 +19,7 @@ export class BoardsController {
 	// @Body() body를 이용하면 모든 request에서 보내온 값을 가져올 수 있다.
 	// 하나씩 가져오려면 @Body('title') title 과 같이..
 	@Post('/')
+	@UsePipes(ValidationPipe) // 유효성 체크하는 빌트인 파이프 사용
 	createBoard(@Body() createBoardDto: CreateBoardDto // DTO 적용
 	): Board{
 		return this.boardsService.createBoard(createBoardDto);
@@ -36,10 +38,11 @@ export class BoardsController {
 	}
 	
 	// 특정 게시물 상태 업데이트 할 때
+	// Status 체크하는 커스텀 파이프 사용
 	@Patch('/:id/status')
 	updateBoardStatus(
 		@Param('id') id:string,
-		@Body('status') status : BoardStatus
+		@Body('status',BoardStatusValidationPipe) status : BoardStatus
 	): Board {
 		return this.boardsService.updateBoardStatus(id,status);
 	}

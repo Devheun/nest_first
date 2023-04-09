@@ -1,7 +1,7 @@
 // 커스텀 파이프로 status가 PUBLIC 과 PRIVATE만 올 수 있게 !
 
 import { BadRequestException , PipeTransform, Injectable} from "@nestjs/common";
-import { BoardStatus } from "../board.model";
+import { BoardStatus } from "../board-status.enum";
 
 @Injectable()
 export class BoardStatusValidationPipe implements PipeTransform{
